@@ -1,0 +1,3 @@
+how to install Android Debug Bridge:
+https://wiki.lineageos.org/adb_fastboot_guide.html
+

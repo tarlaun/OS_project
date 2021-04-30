@@ -6,3 +6,6 @@ https://gist.github.com/koroshiya/37f8a885c736a886368c906e072a5cdc
 
 an open-source solution for backing up installed apps using another app:
 https://github.com/axxapy/apkExtractor
+
+Android Cloudsync Backup API (MIT):
+https://stuff.mit.edu/afs/sipb/project/android/docs/training/cloudsync/backupapi.html

@@ -9,3 +9,6 @@ https://github.com/axxapy/apkExtractor
 
 Android Cloudsync Backup API (MIT):
 https://stuff.mit.edu/afs/sipb/project/android/docs/training/cloudsync/backupapi.html
+
+A user guide for using adb commands to backup apps:
+https://9to5google.com/2017/11/04/how-to-backup-restore-android-device-data-android-basics/

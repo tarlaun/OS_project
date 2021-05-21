@@ -1,0 +1,13 @@
+adb backup and resotre command options:
+backup [-f FILE] [-apk|-noapk] [-obb|-noobb] [-shared|-noshared] [-all]
+    [-system|-nosystem] [-keyvalue|-nokeyvalue] [PACKAGE...]
+    write an archive of the device's data to FILE [default=backup.adb]
+    package list optional if -all/-shared are supplied
+    -apk/-noapk: do/don't back up .apk files (default -noapk)
+    -obb/-noobb: do/don't back up .obb files (default -noobb)
+    -shared|-noshared: do/don't back up shared storage (default -noshared)
+    -all: back up all installed applications
+    -system|-nosystem: include system apps in -all (default -system)
+    -keyvalue|-nokeyvalue: include apps that perform key/value backups.
+        (default -nokeyvalue)
+restore FILE             restore device contents from FILE

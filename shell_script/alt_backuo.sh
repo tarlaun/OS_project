@@ -21,7 +21,7 @@ while true; do
 	read inp
 	if [ $inp == "ALL" ]; then
 		cur_apps=$all_apps
-		all_flag=0
+		all_flag=1
 		break
 	elif [ $inp == "FINISH" ]; then
 		break

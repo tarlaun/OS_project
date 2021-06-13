@@ -18,3 +18,7 @@ https://gist.github.com/AnatomicJC/e773dd55ae60ab0b2d6dd2351eb977c1
 
 Android platform-tools download (includes adb):
 https://developer.android.com/studio/releases/platform-tools
+
+SeedVault, an open-source backup application. Used by LineageOS (second link).
+https://github.com/seedvault-app/seedvault
+https://github.com/LineageOS/android_packages_apps_Seedvault

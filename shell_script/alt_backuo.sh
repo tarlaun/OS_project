@@ -72,11 +72,11 @@ for APP in "${cur_apps[@]}"; do
 	for pth in $name2; do
 		$adb pull /$pth "backup/$name.apk"
 	done
-	if [ all_flag == 0]; then
+	if [ $all_flag == 0]; then
 		$adb backup -f backup/$name.ab $name
 	fi
 done
-if all_flag; then
+if [ $all_flag == 1 ]; then
 	adb backup -all -nosystem -f backup/$name.ab
 fi
 read first_

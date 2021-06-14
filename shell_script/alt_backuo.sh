@@ -64,17 +64,18 @@ while true; do
 	fi
 done
 
-echo "here"
+echo "now the backup process begins: "
 
 for APP in "${cur_apps[@]}"; do
 	echo $APP
 	name=$(echo ${APP} | sed "s/^package://")
 	name2=$($adb shell pm path $name | sed "s/^package://")
+	mkdir "backup/$name" -p
 	for pth in $name2; do
-		$adb pull /$pth "backup/$name.apk"
+		$adb pull /$pth "backup/$name/$name.apk"
 	done
-	if [ $all_flag == 0]; then
-		$adb backup -f backup/$name.ab $name
+	if [ $all_flag == 0 ]; then
+		$adb backup -f backup/$APP/$name.ab $name
 	fi
 done
 if [ $all_flag == 1 ]; then

@@ -1,4 +1,4 @@
-This is an app to back up and restore Android apps from one device to another.
+This is an app to back up Android apps and data on one device and restore them on another.
 
 Below is a guide on how to use it
 

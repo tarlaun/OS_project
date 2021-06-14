@@ -1,0 +1,12 @@
+adb="./adb.exe"
+
+echo "------------------------------"
+echo "Welcome back!"
+echo "Let's restore your previously backed up apps!"
+echo "To restore all backed up apps, type ALL."
+echo "To choose from a list of your files, type CONF."
+echo "Otherwise, type the name of the apps one by one."
+echo "Type FINISH when you finished with the names."
+echo "Type VIEW_ALL to view all apps."
+echo "------------------------------"
+echo ""

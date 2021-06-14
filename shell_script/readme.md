@@ -14,7 +14,7 @@ You can download Android SDK platform-tools [here](https://developer.android.com
 
 **Step 3:**
 
-Either put the shell scripts in the same folder as ADB in Android SDK platform-tools or add ADP to  your PATH variables.
+Either put the shell scripts in the same folder as ADB in Android SDK platform-tools or add ADB to  your PATH variables.
 
 **Step 4:**
 

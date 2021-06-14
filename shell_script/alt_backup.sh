@@ -14,7 +14,6 @@ echo ""
 all_apps=$($adb shell pm list packages -3)
 cur_apps=()
 all_flag=0
-nextst=''
 
 while true; do
 	echo -n ">> "
@@ -46,32 +45,24 @@ while true; do
 			done
 		done
 	else
-		flg=0
-		for APP in $all_apps; do
-			if echo "$APP" | grep -q "$inp"; then
-				if [ $flg == 0 ]; then
-					echo "matched with $APP"
-					cur_apps+=($(echo ${APP} | sed 's/\r//g'))
-					flg=1
-					#break # optional to comment
-				else 
-					echo "unselected candidate $APP"
-				fi
-			fi
-		done
-		
-		if [ $flg == 0 ]; then
+		selected_app="$(python backup_python.py $inp $all_apps)"
+		if [ $selected_app == "no_match" ]; then
 			echo "no match found"
-		fi
+		else
+			echo "matched with $selected_app"
+			cur_apps+=($(echo ${selected_app} | sed 's/\r//g'))
+		fi	
+
 	fi
 done
 
 echo "now the backup process begins: "
 
 for APP in "${cur_apps[@]}"; do
-	echo $APP
+	# echo $APP
 	name=$(echo ${APP} | sed "s/^package://")
 	name2=$($adb shell pm path $name | sed "s/^package://")
+	echo "${name}"
 	mkdir "backup/$name" -p
 	for pth in $name2; do
 		$adb pull /$pth "backup/$name/$name.apk"
@@ -82,7 +73,7 @@ for APP in "${cur_apps[@]}"; do
 done
 if [ $all_flag == 1 ]; then
 	mkdir "backup/alldata" -p
-	adb backup -all -nosystem -f backup/alldata/all.ab
+	adb backup -all -nosystem -f backup/alldata/alldata.ab
 fi
 echo "back up completed."
 read first_

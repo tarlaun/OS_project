@@ -1,4 +1,4 @@
-adb="./adb.exe"
+adb="adb"
 mkdir backup -p
 
 echo "------------------------------"
@@ -20,7 +20,7 @@ while true; do
 	read inp
 	if [ $inp == "ALL" ]; then
 		for APP in $all_apps; do
-		cur_apps+=($(echo ${APP} | sed 's/\r//g'))
+			cur_apps+=($(echo ${APP} | sed 's/\r//g'))
 		done
 		all_flag=1
 		break
@@ -75,7 +75,7 @@ for APP in "${cur_apps[@]}"; do
 done
 if [ $all_flag == 1 ]; then
 	mkdir "backup/alldata" -p
-	adb backup -all -nosystem -f backup/alldata/alldata.ab
+	adb backup -all -nosystem -f "backup/alldata/alldata.ab"
 fi
 echo "back up completed."
 read first_

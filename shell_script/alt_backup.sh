@@ -19,7 +19,9 @@ while true; do
 	echo -n ">> "
 	read inp
 	if [ $inp == "ALL" ]; then
-		cur_apps=$all_apps
+		for APP in $all_apps; do
+		cur_apps+=($(echo ${APP} | sed 's/\r//g'))
+		done
 		all_flag=1
 		break
 	elif [ $inp == "FINISH" ]; then
@@ -59,10 +61,10 @@ done
 echo "now the backup process begins: "
 
 for APP in "${cur_apps[@]}"; do
-	# echo $APP
+	echo $APP
 	name=$(echo ${APP} | sed "s/^package://")
 	name2=$($adb shell pm path $name | sed "s/^package://")
-	echo "${name}"
+	echo $name
 	mkdir "backup/$name" -p
 	for pth in $name2; do
 		$adb pull /$pth "backup/$name/$name.apk"

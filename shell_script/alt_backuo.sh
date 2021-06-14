@@ -14,6 +14,7 @@ echo ""
 all_apps=$($adb shell pm list packages -3)
 cur_apps=()
 all_flag=0
+nextst=''
 
 while true; do
 	echo -n ">> "
@@ -33,10 +34,9 @@ while true; do
 				echo -n ">> "
 				read inp
 				if [ $inp == "y" ]; then
-					nextst = $(echo ${APP} | sed 's/\r//g')
-					cur_apps += $nextst
+					cur_apps+=($(echo ${APP} | sed 's/\r//g'))
 					break
-				elif [ $inp == "n"]; then
+				elif [ $inp == "n" ]; then
 					break
 				else
 					echo "invalid input. please try again."

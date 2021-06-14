@@ -15,7 +15,6 @@ all_apps=$($adb shell pm list packages -3)
 cur_apps=()
 all_flag=0
 
-
 while true; do
 	echo -n ">> "
 	read inp
@@ -34,7 +33,8 @@ while true; do
 				echo -n ">> "
 				read inp
 				if [ $inp == "y" ]; then
-					cur_apps += ($(echo ${APP} | sed 's/\r//g'))
+					nextst = $(echo ${APP} | sed 's/\r//g')
+					cur_apps += $nextst
 					break
 				elif [ $inp == "n"]; then
 					break
@@ -64,6 +64,7 @@ while true; do
 	fi
 done
 
+echo "here"
 
 for APP in "${cur_apps[@]}"; do
 	echo $APP

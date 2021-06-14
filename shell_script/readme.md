@@ -15,8 +15,8 @@ You can download Android SDK platform-tools [here](https://developer.android.com
 **Step 3:**
 
 Either put the shell scripts in the same folder as ADB in Android SDK platform-tools or add ADB to  your PATH variables.
-
+make sure to have the above python file in the same folder. 
 **Step 4:**
 
-Connect the Android device that you wish to back up from to your computer and run the scripts, following the instructions that appear when you do
+Connect the Android device that you wish to back up from to your computer and run the scripts, following the instructions that appear when you do.
 

@@ -30,7 +30,7 @@ while true; do
 	elif [ $inp == "CONF" ]; then
 		for APP in $all_apps; do
 			while true; do
-				echo "do you want to include $APP? (y/n)"
+				echo "do you want to include $APP? (y/n/break)"
 				echo -n ">> "
 				read inp
 				if [ $inp == "y" ]; then
@@ -38,6 +38,8 @@ while true; do
 					break
 				elif [ $inp == "n" ]; then
 					break
+				elif [ $inp == "break" ]; then
+					break 2
 				else
 					echo "invalid input. please try again."
 				fi
@@ -75,10 +77,12 @@ for APP in "${cur_apps[@]}"; do
 		$adb pull /$pth "backup/$name/$name.apk"
 	done
 	if [ $all_flag == 0 ]; then
-		$adb backup -f backup/$APP/$name.ab $name
+		$adb backup -f backup/$name/$name.ab $name
 	fi
 done
 if [ $all_flag == 1 ]; then
-	adb backup -all -nosystem -f backup/$name.ab
+	mkdir "backup/alldata" -p
+	adb backup -all -nosystem -f backup/alldata/all.ab
 fi
+echo "back up completed."
 read first_

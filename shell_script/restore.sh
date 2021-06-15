@@ -66,11 +66,18 @@ for APP in "${cur_apps[@]}"; do
 	name2=$($adb shell pm path $name | sed "s/^package://")
 	if test -f "backup/$APP/$APP.apk"; then
 		$adb install backup/$APP/$APP.apk
-		if test -f "backup/$APP/$APP.ab"; then
-			$adb restore backup/$APP/$APP.ab
+		if [ $all_flag == 0 ]; then
+			if test -f "backup/$APP/$APP.ab"; then
+				$adb restore backup/$APP/$APP.ab
+			fi
 		fi
 	fi
 done
+
+if [ $all_flag == 1 ]; then
+	mkdir "backup/alldata" -p
+	$adb restore -all -nosystem -f backup/alldata/alldata.ab
+fi
 
 echo "Ressurection completed!"
 read first_

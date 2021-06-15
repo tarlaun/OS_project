@@ -17,7 +17,8 @@ def LCSubStr(s, t):
                 dp[i % 2][j] = 0
     return res
 
-def change_list(sv):
+def change_list(a,b,c):
+    print(sv.value())
     pass
 app_list = sys.argv[1:]
 root = tk.Tk()
@@ -32,6 +33,7 @@ sv.trace_add("write",callback=change_list)
 
 txt_box = tk.Entry(root,textvariable=sv)
 txt_box.pack()
+
 tk.mainloop()
 
 # final_app = ""

@@ -4,7 +4,7 @@ mkdir backup -p
 echo "------------------------------"
 echo "Welcome to Backup and Restore app!"
 echo "To backup all your apps type ALL."
-echo "To choose from a list of your files, type CONF."
+echo "To choose from a list of your files, type SEL."
 echo "Otherwise type the name of the apps one by one."
 echo "Type FINISH when you finished with the names."
 echo "Type VIEW_ALL to view all apps."
@@ -28,7 +28,7 @@ while true; do
 		break
 	elif [ $inp == "VIEW_ALL" ]; then
 		echo "${all_apps[@]}"
-	elif [ $inp == "CONF" ]; then
+	elif [ $inp == "SEL" ]; then
 		for APP in $all_apps; do
 			while true; do
 				echo "Do you want to include $APP? (y/n/break)"

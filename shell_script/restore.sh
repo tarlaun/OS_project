@@ -57,3 +57,20 @@ while true; do
 
 	fi
 done
+
+echo "Now the restoring process begins: "
+
+for APP in "${cur_apps[@]}"; do
+	echo $APP
+	name=$(echo ${APP} | sed "s/^package://")
+	name2=$($adb shell pm path $name | sed "s/^package://")
+	if test -f "backup/$APP/$APP.apk"; then
+		$adb install backup/$APP/$APP.apk
+		if test -f "backup/$APP/$APP.ab"; then
+			$adb restore backup/$APP/$APP.ab
+		fi
+	fi
+done
+
+echo "Ressurection completed!"
+read first_

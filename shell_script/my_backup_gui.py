@@ -18,35 +18,34 @@ def LCSubStr(s, t):
     return res
 
 def change_list(a,b,c):
-    print(sv.value())
-    pass
-app_list = sys.argv[1:]
+    final_app = []
+    max_len = 0
+    inputstr = sv.get()
+    for app in app_list:
+        lcs = LCSubStr(str(app), str(inputstr))
+        if lcs > max_len:
+            max_len = lcs
+            final_app = [app]
+        elif lcs == max_len:
+            final_app.append(app)
+    curselect = [ls.get(i) for i in ls.curselection()]
+    ls.delete(0,ls.size())
+    for i in range(len(final_app)):
+        app = final_app[i]
+        ls.insert(tk.END,app)
+        if app in curselect:
+            ls.select_set(i)
+
+app_list = [str(x) for x in sys.argv[1:]]
 root = tk.Tk()
 root.title("Backup")
 ls = tk.Listbox(root,selectmode = 'multiple') 
 ls.pack()
 for app in app_list:
     ls.insert(tk.END,app)
-
 sv = tk.StringVar()
 sv.trace_add("write",callback=change_list)
-
 txt_box = tk.Entry(root,textvariable=sv)
 txt_box.pack()
 
 tk.mainloop()
-
-# final_app = ""
-# max_len = 0
-
-# for app in app_list:
-#     lcs = LCSubStr(str(app), str(inputstr))
-#     if lcs > max_len:
-#         max_len = lcs
-#         final_app = str(app)
-
-# if max_len < int(len(inputstr) * 3 / 4):
-#     print("no_match")
-# else:
-#     print(final_app)
-

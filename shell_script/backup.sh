@@ -75,7 +75,7 @@ for APP in "${cur_apps[@]}"; do
 done
 if [ $all_flag == 1 ]; then
 	mkdir "backup/alldata" -p
-	adb backup -all -nosystem -f backup/alldata/alldata.ab
+	$adb backup -all -nosystem -f backup/alldata/alldata.ab
 fi
 echo "Backup completed!"
 read first_

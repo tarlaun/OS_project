@@ -3,11 +3,11 @@ mkdir backup -p
 
 echo "------------------------------"
 echo "Welcome to Backup and Restore app!"
-echo "To backup all your apps type ALL"
-echo "To choose from a list of your files, type CONF"
-echo "Otherwise type the name of the apps one by one"
-echo "Type FINISH when you finished with the names"
-echo "Type VIEW_ALL to view all apps"
+echo "To backup all your apps type ALL."
+echo "To choose from a list of your files, type SEL."
+echo "Otherwise type the name of the apps one by one."
+echo "Type FINISH when you finished with the names."
+echo "Type VIEW_ALL to view all apps."
 echo "------------------------------"
 echo ""
 
@@ -28,10 +28,10 @@ while true; do
 		break
 	elif [ $inp == "VIEW_ALL" ]; then
 		echo "${all_apps[@]}"
-	elif [ $inp == "CONF" ]; then
+	elif [ $inp == "SEL" ]; then
 		for APP in $all_apps; do
 			while true; do
-				echo "do you want to include $APP? (y/n/break)"
+				echo "Do you want to include $APP? (y/n/break)"
 				echo -n ">> "
 				read inp
 				if [ $inp == "y" ]; then
@@ -58,7 +58,7 @@ while true; do
 	fi
 done
 
-echo "now the backup process begins: "
+echo "Now the backup process begins: "
 
 for APP in "${cur_apps[@]}"; do
 	echo $APP
@@ -75,7 +75,7 @@ for APP in "${cur_apps[@]}"; do
 done
 if [ $all_flag == 1 ]; then
 	mkdir "backup/alldata" -p
-	adb backup -all -nosystem -f "backup/alldata/alldata.ab"
+	$adb backup -all -nosystem -f backup/alldata/alldata.ab
 fi
-echo "back up completed."
+echo "Backup completed!"
 read first_

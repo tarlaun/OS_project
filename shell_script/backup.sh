@@ -1,6 +1,8 @@
 adb="adb"
 mkdir backup -p
 
+
+
 echo "------------------------------"
 echo "Welcome to Backup and Restore app!"
 echo "To backup all your apps type ALL."
@@ -29,23 +31,29 @@ while true; do
 	elif [ $inp == "VIEW_ALL" ]; then
 		echo "${all_apps[@]}"
 	elif [ $inp == "SEL" ]; then
-		for APP in $all_apps; do
-			while true; do
-				echo "Do you want to include $APP? (y/n/break)"
-				echo -n ">> "
-				read inp
-				if [ $inp == "y" ]; then
-					cur_apps+=($(echo ${APP} | sed 's/\r//g'))
-					break
-				elif [ $inp == "n" ]; then
-					break
-				elif [ $inp == "break" ]; then
-					break 2
-				else
-					echo "invalid input. please try again."
-				fi
-			done
+		# for APP in $all_apps; do
+		# 	while true; do
+		# 		echo "Do you want to include $APP? (y/n/break)"
+		# 		echo -n ">> "
+		# 		read inp
+		# 		if [ $inp == "y" ]; then
+		# 			cur_apps+=($(echo ${APP} | sed 's/\r//g'))
+		# 			break
+		# 		elif [ $inp == "n" ]; then
+		# 			break
+		# 		elif [ $inp == "break" ]; then
+		# 			break 2
+		# 		else
+		# 			echo "invalid input. please try again."
+		# 		fi
+		# 	done
+		# done
+		selected=$(python alt_backup_gui.py $all_apps)
+		for APP in $selected; do 
+			echo $APP
+			cur_apps+=($(echo ${APP} | sed 's/\r//g'))
 		done
+		break
 	else
 		selected_app="$(python backup_python.py $inp $all_apps)"
 		if [ $selected_app == "no_match" ]; then
@@ -68,9 +76,12 @@ for APP in "${cur_apps[@]}"; do
 	mkdir "backup/$name" -p
 	for pth in $name2; do
 		$adb pull /$pth "backup/$name/$name.apk"
+		#echo $(aapt2 dump badging "backup/$name/$name.apk" | sed -n "s/^application-label:'\(.*\)'/\1/p")
+		#TODO get app names before showing
 	done
 	if [ $all_flag == 0 ]; then
 		$adb backup -f backup/$name/$name.ab $name
+		#TODO automatic accept
 	fi
 done
 if [ $all_flag == 1 ]; then

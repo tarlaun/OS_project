@@ -1,6 +1,9 @@
 import tkinter as tk
 from tkinter import *
 
+command = "adb shell pm list packages -3"
+output = subprocess.getoutput(command).split() #all the programs
+
 root = tk.Tk()
 root.title("برنامه پشتیبانی‌گیری")
 

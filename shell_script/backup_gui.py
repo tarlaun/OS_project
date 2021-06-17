@@ -1,8 +1,42 @@
 import tkinter as tk
-from tkinter import *
+import subprocess
+
+def LCSubStr(s, t):
+    # Create DP table
+    n = len(s)
+    m = len(t)
+    dp = [[0 for i in range(m + 1)] for j in range(2)]
+    res = 0
+
+    for i in range(1, n + 1):
+        for j in range(1, m + 1):
+            if (s[i - 1] == t[j - 1]):
+                dp[i % 2][j] = dp[(i - 1) % 2][j - 1] + 1
+                if (dp[i % 2][j] > res):
+                    res = dp[i % 2][j]
+            else:
+                dp[i % 2][j] = 0
+    return res
+
+
+def get_closest(inputstr, app_list):
+    final_app = ""
+    max_len = 0
+    for app in app_list:
+        lcs = LCSubStr(str(app), str(inputstr))
+        if lcs > max_len:
+            max_len = lcs
+            final_app = str(app)
+
+    if max_len < int(len(inputstr) * 3 / 4):
+        return "no_match"
+    else:
+        return final_app
+
 
 command = "adb shell pm list packages -3"
-output = subprocess.getoutput(command).split() #all the programs
+apps_together = subprocess.getoutput(command)
+all_the_apps = apps_together.split()  # all the programs
 
 root = tk.Tk()
 root.title("برنامه پشتیبانی‌گیری")
@@ -30,19 +64,30 @@ canvas1.create_window(WINDOW_WIDTH / 2, h0 + (diff * 3), window=label4)
 entry1 = tk.Entry(root)
 canvas1.create_window(WINDOW_WIDTH / 2, h0 + (diff * 4), window=entry1)
 
+programs_to_backup = []
+
 
 def backup_process():
     print("Backup Process")
+    print((programs_to_backup))
     pass
 
 
 def add_one():
     print("Add one")
-    pass
+    new_app = entry1.get()
+    entry1.delete(0, "end")
+    closest = get_closest(new_app, all_the_apps)
+    if closest == "no_match":
+        print("no match found")
+    else:
+        print("matched with " + closest)
+        programs_to_backup.append(closest)
 
 
 def add_all():
-    print("Add all")
+    programs_to_backup = []
+    programs_to_backup.extend(all_the_apps)
     pass
 
 

@@ -10,7 +10,7 @@ for APP in $all_apps; do
     name=($(echo ${APP} | sed "s/^package://" | sed 's/\r//g'))
     app_list+=($name)
 done
-selected=$(python alt_backup_gui.py ${app_list[@]})
+selected=$(python backup_gui.py ${app_list[@]})
 
 if [ $selected == "ALL" ]; then
     for APP in ${app_list[@]}; do
@@ -30,6 +30,7 @@ for name in "${cur_apps[@]}"; do
 	echo $name
 	mkdir "backup/$name" -p
 	for pth in $name2; do
+		echo $pth
 		$adb pull /$pth "backup/$name/$name.apk"
 		#echo $(aapt2 dump badging "backup/$name/$name.apk" | sed -n "s/^application-label:'\(.*\)'/\1/p")
 		#TODO get app names before showing

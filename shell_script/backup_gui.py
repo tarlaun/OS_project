@@ -78,6 +78,18 @@ def backup_process():
         name2 = subprocess.getoutput(command)[8:]
         command = 'mkdir "backup/' + name + '" -p'
         subprocess.getoutput(command)
+        print("Number of the paths for this file:")
+        print(len(name2.split()))
+        for path in name2.split():
+            # backup the apk file
+            command = 'adb.exe pull /' + path + ' "backup/' + name + '/' + name + '.apk'
+            output = subprocess.getoutput(command)
+            print(output)
+
+            # backup the data
+            command = 'adb.exe backup -f backup/' + name + '/' + name + '.ab ' + name
+            output = subprocess.getoutput(command)
+            print(output)
     
     print("Backup completed!")
 

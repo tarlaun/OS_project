@@ -66,11 +66,20 @@ canvas1.create_window(WINDOW_WIDTH / 2, h0 + (diff * 4), window=entry1)
 
 programs_to_backup = []
 
-
 def backup_process():
     print("Backup Process")
     print((programs_to_backup))
-    pass
+    
+    for app in programs_to_backup:
+        print(app)
+        name = app[8:]
+        print(name)
+        command = 'adb.exe shell pm path ' + name
+        name2 = subprocess.getoutput(command)[8:]
+        command = 'mkdir "backup/' + name + '" -p'
+        subprocess.getoutput(command)
+    
+    print("Backup completed!")
 
 
 def add_one():

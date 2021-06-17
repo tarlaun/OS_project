@@ -1,4 +1,4 @@
-adb="adb"
+adb="./adb.exe"
 mkdir backup -p
 
 
@@ -8,7 +8,7 @@ echo "Welcome to Backup and Restore app!"
 echo "To backup all your apps type ALL."
 echo "To choose from a list of your files, type SEL."
 echo "Otherwise type the name of the apps one by one."
-echo "Type FINISH when you finished with the names."
+echo "Type FINISH when you are finished with the names."
 echo "Type VIEW_ALL to view all apps."
 echo "------------------------------"
 echo ""
@@ -31,29 +31,23 @@ while true; do
 	elif [ $inp == "VIEW_ALL" ]; then
 		echo "${all_apps[@]}"
 	elif [ $inp == "SEL" ]; then
-		# for APP in $all_apps; do
-		# 	while true; do
-		# 		echo "Do you want to include $APP? (y/n/break)"
-		# 		echo -n ">> "
-		# 		read inp
-		# 		if [ $inp == "y" ]; then
-		# 			cur_apps+=($(echo ${APP} | sed 's/\r//g'))
-		# 			break
-		# 		elif [ $inp == "n" ]; then
-		# 			break
-		# 		elif [ $inp == "break" ]; then
-		# 			break 2
-		# 		else
-		# 			echo "invalid input. please try again."
-		# 		fi
-		# 	done
-		# done
-		selected=$(python alt_backup_gui.py $all_apps)
-		for APP in $selected; do 
-			echo $APP
-			cur_apps+=($(echo ${APP} | sed 's/\r//g'))
+		for APP in $all_apps; do
+			while true; do
+		 		echo "Do you want to include $APP? (y/n/break)"
+		 		echo -n ">> "
+		 		read inp
+		 		if [ $inp == "y" ]; then
+		 			cur_apps+=($(echo ${APP} | sed 's/\r//g'))
+		 			break
+		 		elif [ $inp == "n" ]; then
+		 			break
+		 		elif [ $inp == "break" ]; then
+		 			break 2
+		 		else
+		 			echo "invalid input. please try again."
+		 		fi
+		 	done
 		done
-		break
 	else
 		selected_app="$(python backup_python.py $inp $all_apps)"
 		if [ $selected_app == "no_match" ]; then

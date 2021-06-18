@@ -115,14 +115,14 @@ def add_one():
         print("matched with " + closest)
         programs_to_backup.append(closest)
         s = "\n".join(programs_to_backup)
-        apps_text_box.config(text=s)
+        backup_text_box.config(text=s)
 
 
 def add_all():
     programs_to_backup = []
     programs_to_backup.extend(all_the_apps)
-    pass
-
+    s = "\n".join(programs_to_backup)
+    backup_text_box.config(text=s)
 
 def restore():
     print("Restore")
@@ -144,8 +144,14 @@ def show_restore():
     new_canvas = tk.Toplevel(root, width=500, height=500)
     all_app = tk.Listbox(new_canvas, width= 70, height=20)
     all_app.pack(side=tk.LEFT, fill=tk.BOTH)
-    for a in []:
-        all_app.insert(tk.END, a[8:])
+    command = 'dir "backup" /b'
+    file_names = subprocess.getoutput(command).split()
+    try:
+        file_names.remove("alldata")
+    except:
+        print("no all data")
+    for a in file_names:
+        all_app.insert(tk.END, a)
     w = tk.Scrollbar(new_canvas)
     w.pack(side=tk.RIGHT, fill=tk.BOTH)
     all_app.config(yscrollcommand=w.set)
@@ -153,7 +159,7 @@ def show_restore():
 
 
 commands = dict()
-commands['پشتیبانی‌گیری همه'] = add_all
+commands['اضافه کردن همه'] = add_all
 commands['اضافه کردن'] = add_one
 commands['پشتیبان گیری'] = backup_process
 commands['نشان‌دادن برنامه‌ها'] = show_backup
@@ -163,7 +169,7 @@ button_diff = 42.5
 button_height = 25
 button_width = 100
 for text in (
-        'پشتیبان گیری', 'اضافه کردن', 'پشتیبانی‌گیری همه' ,'نشان‌دادن برنامه‌ها'):
+        'پشتیبان گیری', 'اضافه کردن', 'اضافه کردن همه' ,'نشان‌دادن برنامه‌ها'):
     button = tk.Button(root, text=text, image=pixel, height=button_height, width=button_width, command=commands[text],
                        compound="c")
 
@@ -174,7 +180,7 @@ for text in (
 
 
 commands_r = dict()
-commands_r['بازیابی همه'] = add_all
+commands_r['اضافه کردن همه'] = add_all
 commands_r['اضافه کردن'] = add_one
 commands_r['بازیابی'] = backup_process
 commands_r['نشان‌دادن برنامه‌ها'] = show_restore
@@ -184,7 +190,7 @@ button_diff = 42.5
 button_height = 25
 button_width = 100
 for text in (
-        'بازیابی', 'اضافه کردن', 'بازیابی همه' ,'نشان‌دادن برنامه‌ها'):
+        'بازیابی', 'اضافه کردن', 'اضافه کردن همه' ,'نشان‌دادن برنامه‌ها'):
     button = tk.Button(root, text=text, image=pixel, height=button_height, width=button_width, command=commands_r[text],
                        compound="c")
 

@@ -42,7 +42,7 @@ all_the_apps = apps_together.split()  # all the programs
 root = tk.Tk()
 root.title("برنامه پشتیبانی‌گیری")
 
-WINDOW_WIDTH = 800
+WINDOW_WIDTH = 1000
 WINDOW_HEIGHT = 400
 canvas1 = tk.Canvas(root, width=WINDOW_WIDTH, height=WINDOW_HEIGHT, relief='raised')
 canvas1.pack()
@@ -62,10 +62,16 @@ label4 = tk.Label(root,
                   text=' در صورتی که قبلاً پشتیبان گیری کرده اید برای رفتن به صفحه بازیابی، دکمه بازیابی را فشار دهید')
 label4.config(font=('B Nazanin', 14))
 canvas1.create_window(WINDOW_WIDTH / 2, h0 + (diff * 3), window=label4)
-entry1 = tk.Entry(root, width=70)
-canvas1.create_window(WINDOW_WIDTH / 2 + 70, h0 + (diff * 4), window=entry1)
-apps_text_box = tk.Label(root, text='', width=60, height=7, borderwidth=3, relief="sunken")
-canvas1.create_window(WINDOW_WIDTH / 2 + 70, WINDOW_HEIGHT * 3 / 5, window=apps_text_box)
+entry1 = tk.Entry(root, width=50)
+canvas1.create_window(WINDOW_WIDTH / 2 - 210, h0 + (diff * 4), window=entry1)
+backup_text_box = tk.Label(root, text='', width=42, height=7, borderwidth=3, relief="sunken")
+canvas1.create_window(WINDOW_WIDTH / 2 - 210, WINDOW_HEIGHT * 3 / 5, window=backup_text_box)
+
+entry2 = tk.Entry(root, width=50)
+canvas1.create_window(WINDOW_WIDTH / 2 + 250, h0 + (diff * 4), window=entry2)
+restore_text_box = tk.Label(root, text='', width=42, height=7, borderwidth=3, relief="sunken")
+canvas1.create_window(WINDOW_WIDTH / 2 + 250, WINDOW_HEIGHT * 3 / 5, window=restore_text_box)
+
 
 programs_to_backup = []
 
@@ -123,7 +129,7 @@ def restore():
     pass
 
 
-def show_apps():
+def show_backup():
     new_canvas = tk.Toplevel(root, width=500, height=500)
     all_app = tk.Listbox(new_canvas, width= 70, height=20)
     all_app.pack(side=tk.LEFT, fill=tk.BOTH)
@@ -134,26 +140,55 @@ def show_apps():
     all_app.config(yscrollcommand=w.set)
     w.config(command=all_app.yview)
 
-
+def show_restore():
+    new_canvas = tk.Toplevel(root, width=500, height=500)
+    all_app = tk.Listbox(new_canvas, width= 70, height=20)
+    all_app.pack(side=tk.LEFT, fill=tk.BOTH)
+    for a in []:
+        all_app.insert(tk.END, a[8:])
+    w = tk.Scrollbar(new_canvas)
+    w.pack(side=tk.RIGHT, fill=tk.BOTH)
+    all_app.config(yscrollcommand=w.set)
+    w.config(command=all_app.yview)
 
 
 commands = dict()
-commands['همه'] = add_all
+commands['پشتیبانی‌گیری همه'] = add_all
 commands['اضافه کردن'] = add_one
-commands['بازیابی'] = restore
 commands['پشتیبان گیری'] = backup_process
-commands['نشان‌دادن برنامه‌ها'] = show_apps
+commands['نشان‌دادن برنامه‌ها'] = show_backup
 button_h_start = 150
 i = 0
-button_diff = 35
+button_diff = 42.5
 button_height = 25
 button_width = 100
 for text in (
-        'بازیابی', 'پشتیبان گیری', 'همه', 'اضافه کردن', 'نشان‌دادن برنامه‌ها'):
+        'پشتیبان گیری', 'اضافه کردن', 'پشتیبانی‌گیری همه' ,'نشان‌دادن برنامه‌ها'):
     button = tk.Button(root, text=text, image=pixel, height=button_height, width=button_width, command=commands[text],
                        compound="c")
 
-    canvas1.create_window(WINDOW_WIDTH / 2 - 200, button_h_start + (button_diff * i), window=button)
+    canvas1.create_window(WINDOW_WIDTH / 2 - 430, button_h_start + (button_diff * i), window=button)
+    i += 1
+
+
+
+
+commands_r = dict()
+commands_r['بازیابی همه'] = add_all
+commands_r['اضافه کردن'] = add_one
+commands_r['بازیابی'] = backup_process
+commands_r['نشان‌دادن برنامه‌ها'] = show_restore
+button_h_start = 150
+i = 0
+button_diff = 42.5
+button_height = 25
+button_width = 100
+for text in (
+        'بازیابی', 'اضافه کردن', 'بازیابی همه' ,'نشان‌دادن برنامه‌ها'):
+    button = tk.Button(root, text=text, image=pixel, height=button_height, width=button_width, command=commands_r[text],
+                       compound="c")
+
+    canvas1.create_window(WINDOW_WIDTH / 2 + 30, button_h_start + (button_diff * i), window=button)
     i += 1
 
 root.mainloop()

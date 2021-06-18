@@ -1,6 +1,7 @@
 import tkinter as tk
 import subprocess
 
+
 def LCSubStr(s, t):
     # Create DP table
     n = len(s)
@@ -61,15 +62,18 @@ label4 = tk.Label(root,
                   text=' در صورتی که قبلاً پشتیبان گیری کرده اید برای رفتن به صفحه بازیابی، دکمه بازیابی را فشار دهید')
 label4.config(font=('B Nazanin', 14))
 canvas1.create_window(WINDOW_WIDTH / 2, h0 + (diff * 3), window=label4)
-entry1 = tk.Entry(root)
-canvas1.create_window(WINDOW_WIDTH / 2, h0 + (diff * 4), window=entry1)
+entry1 = tk.Entry(root, width=70)
+canvas1.create_window(WINDOW_WIDTH / 2 + 70, h0 + (diff * 4), window=entry1)
+apps_text_box = tk.Label(root, text='', width=60, height=7, borderwidth=3, relief="sunken")
+canvas1.create_window(WINDOW_WIDTH / 2 + 70, WINDOW_HEIGHT * 3 / 5, window=apps_text_box)
 
 programs_to_backup = []
+
 
 def backup_process():
     print("Backup Process")
     print((programs_to_backup))
-    
+
     for app in programs_to_backup:
         print(app)
         name = app[8:]
@@ -90,7 +94,7 @@ def backup_process():
             command = 'adb.exe backup -f backup/' + name + '/' + name + '.ab ' + name
             output = subprocess.getoutput(command)
             print(output)
-    
+
     print("Backup completed!")
 
 
@@ -104,6 +108,8 @@ def add_one():
     else:
         print("matched with " + closest)
         programs_to_backup.append(closest)
+        s = "\n".join(programs_to_backup)
+        apps_text_box.config(text=s)
 
 
 def add_all():
@@ -117,19 +123,33 @@ def restore():
     pass
 
 
+def show_apps():
+    new_canvas = tk.Toplevel(root, width=500, height=500)
+    all_app = tk.Listbox(new_canvas, width= 70, height=20)
+    all_app.pack(side=tk.LEFT, fill=tk.BOTH)
+    for a in all_the_apps:
+        all_app.insert(tk.END, a[8:])
+    w = tk.Scrollbar(new_canvas)
+    w.pack(side=tk.RIGHT, fill=tk.BOTH)
+    all_app.config(yscrollcommand=w.set)
+    w.config(command=all_app.yview)
+
+
+
+
 commands = dict()
 commands['همه'] = add_all
 commands['اضافه کردن'] = add_one
 commands['بازیابی'] = restore
 commands['پشتیبان گیری'] = backup_process
-
+commands['نشان‌دادن برنامه‌ها'] = show_apps
 button_h_start = 150
 i = 0
 button_diff = 35
 button_height = 25
 button_width = 100
 for text in (
-        'بازیابی', 'پشتیبان گیری', 'همه', 'اضافه کردن'):
+        'بازیابی', 'پشتیبان گیری', 'همه', 'اضافه کردن', 'نشان‌دادن برنامه‌ها'):
     button = tk.Button(root, text=text, image=pixel, height=button_height, width=button_width, command=commands[text],
                        compound="c")
 

@@ -78,6 +78,7 @@ programs_to_restore = []
 
 
 def backup_process():
+    global programs_to_backup
     try:
         print("Backup Process")
         print((programs_to_backup))
@@ -90,8 +91,8 @@ def backup_process():
             name2 = subprocess.getoutput(command)[8:]
             command = 'mkdir "backup/' + name
             subprocess.getoutput(command)
-            print("Number of the paths for this file:")
-            print(len(name2.split()))
+            print("Number of the paths for this file:" + str(len(name2.split())))
+
             for path in name2.split():
                 # backup the apk file
                 command = 'adb.exe pull /' + path + ' "backup/' + name + '/' + name + '.apk'
@@ -104,8 +105,11 @@ def backup_process():
                 print(output)
 
         backup_text_box.config(text="Backup completed!")
+        print("Backup completed!")
     except:
         backup_text_box.config(text="Something went wrong")
+    finally:
+        programs_to_backup = []
 
 
 def add_one_backup():
@@ -117,7 +121,8 @@ def add_one_backup():
         print("no match found")
     else:
         print("matched with " + closest)
-        programs_to_backup.append(closest)
+        if closest not in programs_to_backup:
+            programs_to_backup.append(closest)
         s = "\n".join(programs_to_backup)
         backup_text_box.config(text=s)
 
@@ -129,10 +134,19 @@ def add_all_backup():
     s = "\n".join(programs_to_backup)
     backup_text_box.config(text=s)
 
+def backup_listbox_add_button(listbox):
+    for i in listbox.curselection():
+        name = "package:" + listbox.get(i)
+        if name not in programs_to_backup:
+            programs_to_backup.append(name)
+        s = "\n".join(programs_to_backup)
+        backup_text_box.config(text=s)
 
 def show_backup():
     new_canvas = tk.Toplevel(root, width=500, height=500)
-    all_app = tk.Listbox(new_canvas, width=70, height=20)
+    all_app = tk.Listbox(new_canvas, width=70, height=20, selectmode=tk.MULTIPLE)
+    btn = tk.Button(new_canvas, text='Add', command= lambda: backup_listbox_add_button(all_app))
+    btn.pack(side='bottom')
     all_app.pack(side=tk.LEFT, fill=tk.BOTH)
     for a in all_the_apps:
         all_app.insert(tk.END, a[8:])
@@ -169,10 +183,19 @@ def restore_process():
     except:
         restore_text_box.config(text="Something went wrong")
 
+def restore_listbox_add_button(listbox):
+    for i in listbox.curselection():
+        name = "package:" + listbox.get(i)
+        if name not in programs_to_restore:
+            programs_to_restore.append(name)
+        s = "\n".join(programs_to_restore)
+        restore_text_box.config(text=s)
 
 def show_restore():
     new_canvas = tk.Toplevel(root, width=500, height=500)
-    all_app = tk.Listbox(new_canvas, width=70, height=20)
+    all_app = tk.Listbox(new_canvas, width=70, height=20, selectmode=tk.MULTIPLE)
+    btn = tk.Button(new_canvas, text='Add', command= lambda: restore_listbox_add_button(all_app))
+    btn.pack(side='bottom')
     all_app.pack(side=tk.LEFT, fill=tk.BOTH)
     command = 'dir "backup" /b'
     file_names = subprocess.getoutput(command).split()
@@ -203,7 +226,8 @@ def add_one_restore():
         print("no match found")
     else:
         print("matched with " + closest)
-        programs_to_restore.append(closest)
+        if closest not in programs_to_restore:
+            programs_to_restore.append(closest)
         s = "\n".join(programs_to_restore)
         restore_text_box.config(text=s)
 
@@ -216,7 +240,6 @@ def add_all_restore():
     except:
         print("no all data")
     programs_to_restore = file_names.copy()
-    pass
 
 
 commands = dict()

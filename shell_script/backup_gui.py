@@ -39,7 +39,6 @@ command = "adb shell pm list packages -3"
 apps_together = subprocess.getoutput(command)
 all_the_apps = apps_together.split()  # all the programs to backup
 
-
 root = tk.Tk()
 root.title("برنامه پشتیبانی‌گیری")
 
@@ -147,13 +146,11 @@ def restore_process():
         command = 'dir "backup" /b'
         file_names = subprocess.getoutput(command).split()
         all_data_separate = False
-        try:
-            file_names.remove("alldata")
+        if "alldata" in file_names:
             all_data_separate = True
-        except:
-            print("no all data")
 
-        for app in file_names:
+        print(programs_to_restore)
+        for app in programs_to_restore:
             command1 = 'adb install backup/' + str(app) + '/' + str(app) + '.apk'
             print(subprocess.getoutput(command1))
             if not all_data_separate:
@@ -214,7 +211,13 @@ def add_all_restore():
         file_names.remove("alldata")
     except:
         print("no all data")
+    global programs_to_restore
     programs_to_restore = file_names.copy()
+    s = "\n".join(programs_to_restore)
+    print("PPP")
+    print(programs_to_restore)
+    print("YYY")
+    restore_text_box.config(text=s)
     pass
 
 

@@ -37,7 +37,8 @@ def get_closest(inputstr, app_list):
 
 command = "adb shell pm list packages -3"
 apps_together = subprocess.getoutput(command)
-all_the_apps = apps_together.split()  # all the programs
+all_the_apps = apps_together.split()  # all the programs to backup
+
 
 root = tk.Tk()
 root.title("برنامه پشتیبانی‌گیری")
@@ -72,39 +73,42 @@ canvas1.create_window(WINDOW_WIDTH / 2 + 250, h0 + (diff * 4), window=entry2)
 restore_text_box = tk.Label(root, text='', width=42, height=7, borderwidth=3, relief="sunken")
 canvas1.create_window(WINDOW_WIDTH / 2 + 250, WINDOW_HEIGHT * 3 / 5, window=restore_text_box)
 
-
 programs_to_backup = []
+programs_to_restore = []
 
 
 def backup_process():
-    print("Backup Process")
-    print((programs_to_backup))
+    try:
+        print("Backup Process")
+        print((programs_to_backup))
 
-    for app in programs_to_backup:
-        print(app)
-        name = app[8:]
-        print(name)
-        command = 'adb.exe shell pm path ' + name
-        name2 = subprocess.getoutput(command)[8:]
-        command = 'mkdir "backup/' + name + '" -p'
-        subprocess.getoutput(command)
-        print("Number of the paths for this file:")
-        print(len(name2.split()))
-        for path in name2.split():
-            # backup the apk file
-            command = 'adb.exe pull /' + path + ' "backup/' + name + '/' + name + '.apk'
-            output = subprocess.getoutput(command)
-            print(output)
+        for app in programs_to_backup:
+            print(app)
+            name = app[8:]
+            print(name)
+            command = 'adb.exe shell pm path ' + name
+            name2 = subprocess.getoutput(command)[8:]
+            command = 'mkdir "backup/' + name + '" -p'
+            subprocess.getoutput(command)
+            print("Number of the paths for this file:")
+            print(len(name2.split()))
+            for path in name2.split():
+                # backup the apk file
+                command = 'adb.exe pull /' + path + ' "backup/' + name + '/' + name + '.apk'
+                output = subprocess.getoutput(command)
+                print(output)
 
-            # backup the data
-            command = 'adb.exe backup -f backup/' + name + '/' + name + '.ab ' + name
-            output = subprocess.getoutput(command)
-            print(output)
+                # backup the data
+                command = 'adb.exe backup -f backup/' + name + '/' + name + '.ab ' + name
+                output = subprocess.getoutput(command)
+                print(output)
 
-    print("Backup completed!")
+        backup_text_box.config(text="Backup completed!")
+    except:
+        backup_text_box.config(text="Something went wrong")
 
 
-def add_one():
+def add_one_backup():
     print("Add one")
     new_app = entry1.get()
     entry1.delete(0, "end")
@@ -118,20 +122,16 @@ def add_one():
         backup_text_box.config(text=s)
 
 
-def add_all():
+def add_all_backup():
     programs_to_backup = []
     programs_to_backup.extend(all_the_apps)
     s = "\n".join(programs_to_backup)
     backup_text_box.config(text=s)
 
-def restore():
-    print("Restore")
-    pass
-
 
 def show_backup():
     new_canvas = tk.Toplevel(root, width=500, height=500)
-    all_app = tk.Listbox(new_canvas, width= 70, height=20)
+    all_app = tk.Listbox(new_canvas, width=70, height=20)
     all_app.pack(side=tk.LEFT, fill=tk.BOTH)
     for a in all_the_apps:
         all_app.insert(tk.END, a[8:])
@@ -140,9 +140,38 @@ def show_backup():
     all_app.config(yscrollcommand=w.set)
     w.config(command=all_app.yview)
 
+
+def restore_process():
+    try:
+        print("Restore")
+        command = 'dir "backup" /b'
+        file_names = subprocess.getoutput(command).split()
+        all_data_separate = False
+        try:
+            file_names.remove("alldata")
+            all_data_separate = True
+        except:
+            print("no all data")
+
+        for app in file_names:
+            command1 = 'adb install backup/' + str(app) + '/' + str(app) + '.apk'
+            print(subprocess.getoutput(command1))
+            if not all_data_separate:
+                command2 = 'adb restore backup/' + str(app) + '/' + str(app) + '.ab'
+                print(subprocess.getoutput(command2))
+
+        if all_data_separate:
+            command3 = 'adb restore -all -nosystem -f backup/alldata/alldata.ab'
+            print(subprocess.getoutput(command3))
+
+        restore_text_box.config(text="Restore completed!")
+    except:
+        restore_text_box.config(text="Something went wrong")
+
+
 def show_restore():
     new_canvas = tk.Toplevel(root, width=500, height=500)
-    all_app = tk.Listbox(new_canvas, width= 70, height=20)
+    all_app = tk.Listbox(new_canvas, width=70, height=20)
     all_app.pack(side=tk.LEFT, fill=tk.BOTH)
     command = 'dir "backup" /b'
     file_names = subprocess.getoutput(command).split()
@@ -158,9 +187,40 @@ def show_restore():
     w.config(command=all_app.yview)
 
 
+def add_one_restore():
+    command = 'dir "backup" /b'
+    file_names = subprocess.getoutput(command).split()
+    try:
+        file_names.remove("alldata")
+    except:
+        print("no all data")
+
+    new_app = entry2.get()
+    entry2.delete(0, "end")
+    closest = get_closest(new_app, file_names)
+    if closest == "no_match":
+        print("no match found")
+    else:
+        print("matched with " + closest)
+        programs_to_restore.append(closest)
+        s = "\n".join(programs_to_restore)
+        restore_text_box.config(text=s)
+
+
+def add_all_restore():
+    command = 'dir "backup" /b'
+    file_names = subprocess.getoutput(command).split()
+    try:
+        file_names.remove("alldata")
+    except:
+        print("no all data")
+    programs_to_restore = file_names.copy()
+    pass
+
+
 commands = dict()
-commands['اضافه کردن همه'] = add_all
-commands['اضافه کردن'] = add_one
+commands['اضافه کردن همه'] = add_all_backup
+commands['اضافه کردن'] = add_one_backup
 commands['پشتیبان گیری'] = backup_process
 commands['نشان‌دادن برنامه‌ها'] = show_backup
 button_h_start = 150
@@ -169,20 +229,17 @@ button_diff = 42.5
 button_height = 25
 button_width = 100
 for text in (
-        'پشتیبان گیری', 'اضافه کردن', 'اضافه کردن همه' ,'نشان‌دادن برنامه‌ها'):
+        'پشتیبان گیری', 'اضافه کردن', 'اضافه کردن همه', 'نشان‌دادن برنامه‌ها'):
     button = tk.Button(root, text=text, image=pixel, height=button_height, width=button_width, command=commands[text],
                        compound="c")
 
     canvas1.create_window(WINDOW_WIDTH / 2 - 430, button_h_start + (button_diff * i), window=button)
     i += 1
 
-
-
-
 commands_r = dict()
-commands_r['اضافه کردن همه'] = add_all
-commands_r['اضافه کردن'] = add_one
-commands_r['بازیابی'] = backup_process
+commands_r['اضافه کردن همه'] = add_all_restore
+commands_r['اضافه کردن'] = add_one_restore
+commands_r['بازیابی'] = restore_process
 commands_r['نشان‌دادن برنامه‌ها'] = show_restore
 button_h_start = 150
 i = 0
@@ -190,7 +247,7 @@ button_diff = 42.5
 button_height = 25
 button_width = 100
 for text in (
-        'بازیابی', 'اضافه کردن', 'اضافه کردن همه' ,'نشان‌دادن برنامه‌ها'):
+        'بازیابی', 'اضافه کردن', 'اضافه کردن همه', 'نشان‌دادن برنامه‌ها'):
     button = tk.Button(root, text=text, image=pixel, height=button_height, width=button_width, command=commands_r[text],
                        compound="c")
 

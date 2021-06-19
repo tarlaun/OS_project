@@ -87,7 +87,7 @@ def backup_process():
             print(name)
             command = 'adb.exe shell pm path ' + name
             name2 = subprocess.getoutput(command)[8:]
-            command = 'mkdir "backup/' + name + '" -p'
+            command = 'mkdir "backup/' + name
             subprocess.getoutput(command)
             print("Number of the paths for this file:")
             print(len(name2.split()))

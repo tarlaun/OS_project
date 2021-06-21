@@ -233,6 +233,7 @@ def add_one_restore():
 
 
 def add_all_restore():
+    global programs_to_restore
     command = 'dir "backup" /b'
     file_names = subprocess.getoutput(command).split()
     try:

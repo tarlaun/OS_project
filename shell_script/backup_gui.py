@@ -279,4 +279,5 @@ for text in (
     canvas1.create_window(WINDOW_WIDTH / 2 + 30, button_h_start + (button_diff * i), window=button)
     i += 1
 
+root.iconphoto(False, tk.PhotoImage(file='media/icon.png'))
 root.mainloop()

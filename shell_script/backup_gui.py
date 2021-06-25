@@ -248,6 +248,12 @@ commands['اضافه کردن همه'] = add_all_backup
 commands['اضافه کردن'] = add_one_backup
 commands['پشتیبان گیری'] = backup_process
 commands['نشان‌دادن برنامه‌ها'] = show_backup
+
+cursor = dict()
+cursor['اضافه کردن همه'] = "plus"
+cursor['اضافه کردن'] = "plus"
+cursor['پشتیبان گیری'] = "target"
+cursor['نشان‌دادن برنامه‌ها'] = "circle"
 button_h_start = 150
 i = 0
 button_diff = 42.5
@@ -256,7 +262,7 @@ button_width = 100
 for text in (
         'پشتیبان گیری', 'اضافه کردن', 'اضافه کردن همه', 'نشان‌دادن برنامه‌ها'):
     button = tk.Button(root, text=text, image=pixel, height=button_height, width=button_width, command=commands[text],
-                       compound="c")
+                       compound="c", cursor = cursor[text])
 
     canvas1.create_window(WINDOW_WIDTH / 2 - 430, button_h_start + (button_diff * i), window=button)
     i += 1

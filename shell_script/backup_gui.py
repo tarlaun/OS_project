@@ -145,7 +145,7 @@ def backup_listbox_add_button(listbox):
 def show_backup():
     new_canvas = tk.Toplevel(root, width=500, height=500)
     all_app = tk.Listbox(new_canvas, width=70, height=20, selectmode=tk.MULTIPLE)
-    btn = tk.Button(new_canvas, text='Add', command= lambda: backup_listbox_add_button(all_app))
+    btn = tk.Button(new_canvas, text='اضافه کردن', command= lambda: backup_listbox_add_button(all_app))
     btn.pack(side='bottom')
     all_app.pack(side=tk.LEFT, fill=tk.BOTH)
     for a in all_the_apps:
@@ -161,6 +161,8 @@ def restore_process():
         print("Restore")
         command = 'dir "backup" /b'
         file_names = subprocess.getoutput(command).split()
+        file_names = programs_to_restore
+        print(programs_to_restore)
         all_data_separate = False
         try:
             file_names.remove("alldata")
@@ -185,7 +187,7 @@ def restore_process():
 
 def restore_listbox_add_button(listbox):
     for i in listbox.curselection():
-        name = "package:" + listbox.get(i)
+        name = listbox.get(i)
         if name not in programs_to_restore:
             programs_to_restore.append(name)
         s = "\n".join(programs_to_restore)
@@ -194,7 +196,7 @@ def restore_listbox_add_button(listbox):
 def show_restore():
     new_canvas = tk.Toplevel(root, width=500, height=500)
     all_app = tk.Listbox(new_canvas, width=70, height=20, selectmode=tk.MULTIPLE)
-    btn = tk.Button(new_canvas, text='Add', command= lambda: restore_listbox_add_button(all_app))
+    btn = tk.Button(new_canvas, text='اضافه کردن', command= lambda: restore_listbox_add_button(all_app))
     btn.pack(side='bottom')
     all_app.pack(side=tk.LEFT, fill=tk.BOTH)
     command = 'dir "backup" /b'

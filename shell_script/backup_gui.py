@@ -67,7 +67,6 @@ entry1 = tk.Entry(root, width=50)
 canvas1.create_window(WINDOW_WIDTH / 2 - 210, h0 + (diff * 4), window=entry1)
 backup_text_box = tk.Label(root, text='', width=42, height=7, borderwidth=3, relief="sunken")
 canvas1.create_window(WINDOW_WIDTH / 2 - 210, WINDOW_HEIGHT * 3 / 5, window=backup_text_box)
-
 entry2 = tk.Entry(root, width=50)
 canvas1.create_window(WINDOW_WIDTH / 2 + 250, h0 + (diff * 4), window=entry2)
 restore_text_box = tk.Label(root, text='', width=42, height=7, borderwidth=3, relief="sunken")
@@ -88,21 +87,24 @@ def backup_process():
             name = app[8:]
             print(name)
             command = 'adb.exe shell pm path ' + name
-            name2 = subprocess.getoutput(command)[8:]
+            name2 = subprocess.getoutput(command)
             command = 'mkdir "backup/' + name
             subprocess.getoutput(command)
+            command = 'mkdir "backup/' + name + '/apk'
+            subprocess.getoutput(command)
             print("Number of the paths for this file:" + str(len(name2.split())))
-
             for path in name2.split():
                 # backup the apk file
-                command = 'adb.exe pull /' + path + ' "backup/' + name + '/' + name + '.apk'
+                path = path[8:]
+                savename = path.split('==/')[-1]
+                command = 'adb.exe pull /' + path + ' "backup/' + name + '/apk/' + savename
                 output = subprocess.getoutput(command)
                 print(output)
 
-                # backup the data
-                command = 'adb.exe backup -f backup/' + name + '/' + name + '.ab ' + name
-                output = subprocess.getoutput(command)
-                print(output)
+            # backup the data
+            command = 'adb.exe backup -f backup/' + name + '/' + name + '.ab ' + name
+            output = subprocess.getoutput(command)
+            print(output)
 
         backup_text_box.config(text="Backup completed!")
         print("Backup completed!")
@@ -171,7 +173,10 @@ def restore_process():
             print("no all data")
 
         for app in file_names:
-            command1 = 'adb install backup/' + str(app) + '/' + str(app) + '.apk'
+            command = 'dir "backup/' + str(app) + '/apk" /b'
+            apk_names = subprocess.getoutput(command).split()
+            apk_paths = ' '.join(['backup/' + str(app) + '/apk/' + apkname for apkname in apk_names])
+            command1 = 'adb install-multiple ' + apk_paths
             print(subprocess.getoutput(command1))
             if not all_data_separate:
                 command2 = 'adb restore backup/' + str(app) + '/' + str(app) + '.ab'
@@ -243,6 +248,8 @@ def add_all_restore():
     except:
         print("no all data")
     programs_to_restore = file_names.copy()
+    s = "\n".join(programs_to_restore)
+    restore_text_box.config(text=s)
 
 
 commands = dict()
@@ -268,6 +275,12 @@ for text in (
 
     canvas1.create_window(WINDOW_WIDTH / 2 - 430, button_h_start + (button_diff * i), window=button)
     i += 1
+
+
+
+entry1.bind('<Return>', lambda x : add_one_backup())
+entry2.bind('<Return>', lambda x: add_one_restore())
+
 
 commands_r = dict()
 commands_r['اضافه کردن همه'] = add_all_restore
